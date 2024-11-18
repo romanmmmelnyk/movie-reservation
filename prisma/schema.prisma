@@ -1,0 +1,78 @@
+//######### DO NOT MODIFY #########
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+enum ReservationStatus {
+  free
+  reserved
+  paid
+  cancelled
+}
+
+
+model Hall {
+  id              Int      @id @default(autoincrement())
+  name            String   @db.VarChar(255)
+  seatingCapacity Int
+  seats           Seat[]
+  showtimes       Showtime[]
+}
+
+
+model Movie {
+  id          Int       @id @default(autoincrement())
+  title       String    @db.VarChar(255)
+  description String?
+  duration    Int       // тривалість у хвилинах
+  posterUrl   String?   @db.VarChar(255)
+  showtimes   Showtime[]
+}
+
+model Reservation {
+  id             Int       @id @default(autoincrement())
+  seatPriceId    Int
+  customerName   String    @db.VarChar(255)
+  customerPhone  String    @db.VarChar(15)
+  reservationTime DateTime?
+  status         ReservationStatus @default(free)
+  seatPrice      SeatPrice @relation(fields: [seatPriceId], references: [id])
+}
+
+model SeatPrice {
+  id         Int       @id @default(autoincrement())
+  seatId     Int
+  showtimeId Int
+  price      Float
+  seat       Seat      @relation(fields: [seatId], references: [id])
+  showtime   Showtime  @relation(fields: [showtimeId], references: [id])
+  reservations Reservation[]
+}
+
+
+model Seat {
+  id         Int      @id @default(autoincrement())
+  hallId     Int
+  row        String   @db.VarChar(10)
+  seatNumber Int
+  hall       Hall     @relation(fields: [hallId], references: [id])
+  seatPrices SeatPrice[]
+}
+
+model Showtime {
+  id        Int       @id @default(autoincrement())
+  movieId   Int
+  hallId    Int
+  startTime DateTime
+  endTime   DateTime
+  movie     Movie     @relation(fields: [movieId], references: [id])
+  hall      Hall      @relation(fields: [hallId], references: [id])
+  seatPrices SeatPrice[]
+}

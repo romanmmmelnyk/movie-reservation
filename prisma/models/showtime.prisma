@@ -1,0 +1,10 @@
+model Showtime {
+  id        Int       @id @default(autoincrement())
+  movieId   Int
+  hallId    Int
+  startTime DateTime
+  endTime   DateTime
+  movie     Movie     @relation(fields: [movieId], references: [id])
+  hall      Hall      @relation(fields: [hallId], references: [id])
+  seatPrices SeatPrice[]
+}

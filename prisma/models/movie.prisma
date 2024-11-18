@@ -1,0 +1,8 @@
+model Movie {
+  id          Int       @id @default(autoincrement())
+  title       String    @db.VarChar(255)
+  description String?
+  duration    Int       // тривалість у хвилинах
+  posterUrl   String?   @db.VarChar(255)
+  showtimes   Showtime[]
+}

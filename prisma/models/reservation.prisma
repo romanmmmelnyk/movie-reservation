@@ -1,0 +1,9 @@
+model Reservation {
+  id             Int       @id @default(autoincrement())
+  seatPriceId    Int
+  customerName   String    @db.VarChar(255)
+  customerPhone  String    @db.VarChar(15)
+  reservationTime DateTime?
+  status         ReservationStatus @default(free)
+  seatPrice      SeatPrice @relation(fields: [seatPriceId], references: [id])
+}

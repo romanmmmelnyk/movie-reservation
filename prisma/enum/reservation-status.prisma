@@ -1,0 +1,6 @@
+enum ReservationStatus {
+  free
+  reserved
+  paid
+  cancelled
+}

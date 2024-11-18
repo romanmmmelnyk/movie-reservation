@@ -1,0 +1,8 @@
+model Seat {
+  id         Int      @id @default(autoincrement())
+  hallId     Int
+  row        String   @db.VarChar(10)
+  seatNumber Int
+  hall       Hall     @relation(fields: [hallId], references: [id])
+  seatPrices SeatPrice[]
+}
