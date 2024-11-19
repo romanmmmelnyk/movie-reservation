@@ -36,6 +36,14 @@ model Movie {
   showtimes   Showtime[]
 }
 
+model Profile {
+      id        Int    @id @default(autoincrement())
+      userId    Int    @unique
+      firstName     String
+      lastName      String
+      user      User   @relation(fields: [userId], references: [id])
+}
+
 model Reservation {
   id             Int       @id @default(autoincrement())
   seatPriceId    Int
@@ -45,6 +53,13 @@ model Reservation {
   status         ReservationStatus @default(free)
   seatPrice      SeatPrice @relation(fields: [seatPriceId], references: [id])
 }
+
+model Role {
+  id    Int                                     @id @default(autoincrement())
+  name  String                                  @unique
+  users User[]                                  @relation("RolesToUser")
+}
+
 
 model SeatPrice {
   id         Int       @id @default(autoincrement())
@@ -75,4 +90,16 @@ model Showtime {
   movie     Movie     @relation(fields: [movieId], references: [id])
   hall      Hall      @relation(fields: [hallId], references: [id])
   seatPrices SeatPrice[]
+}
+
+
+model User {
+      id        Int                                 @id @default(autoincrement()) @unique
+      phone  String    @db.VarChar(15) @unique
+      verify_token     String?
+      roles       Role[]                            @relation("RolesToUser")
+      password   String?
+
+      profile     Profile?
+      createdAt DateTime                            @default(now())
 }

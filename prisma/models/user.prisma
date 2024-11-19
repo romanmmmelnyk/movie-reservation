@@ -1,0 +1,10 @@
+model User {
+      id        Int                                 @id @default(autoincrement()) @unique
+      phone  String    @db.VarChar(15) @unique
+      verify_token     String?
+      roles       Role[]                            @relation("RolesToUser")
+      password   String?
+
+      profile     Profile?
+      createdAt DateTime                            @default(now())
+}
